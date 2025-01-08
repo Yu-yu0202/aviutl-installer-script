@@ -18,18 +18,20 @@ app.on("ready", () => {
 
 	// command execの設定
 	ipcMain.on("run-command", (event, command) => {
-		exec(command, (error, stdout, stderr) => {
-			if (error) {
-				console.error(`Error: ${error.message}`)
-				event.reply("command-result", `Error: ${error.message}`)
-				return;
-			}
-			if (stderr) {
-				console.error(`Stderr: ${stderr}`);
-				event.reply("command-result", `Stderr: stderr`)
-				return;
-			}
-			event.reply("command-result", stdout)
+		const process = spawn(command, [], { shell: true });
+		// 標準出力（stdout）のデータをリアルタイムで受け取る
+		process.stdout.on('data', (data) => {
+			event.reply("command-result", data.toString());
+		});
+
+		// 標準エラー出力（stderr）のデータもリアルタイムで受け取る
+		process.stderr.on('data', (data) => {
+			event.reply("command-result", `ERROR: ${data.toString()}`);
+		});
+
+		// プロセス終了時の処理
+		process.on('close', (code) => {
+			event.reply("command-result", `Process exited with code: ${code}`);
 		});
 	});
 });
