@@ -1,0 +1,12 @@
+.vs/*
+.git/*
+
+node_modules/
+npm-debug.log*
+
+*.asar
+out/
+build/
+
+.DS_Store
+Thumbs.db
