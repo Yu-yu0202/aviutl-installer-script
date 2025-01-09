@@ -1,41 +1,42 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const { exec } = require('child_process')
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { spawn } = require('child_process');
+const path = require('path');
 
 let mainWindow;
 
 app.on("ready", () => {
-	// GUIを初期化
-	mainWindow = new BrowserWindow({
-		width: 800,
-		height: 600,
-		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	});
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.join('./preload.js'),
+            nodeIntegration: false,
+            contextIsolation: true,
+            devTools: true
+        }
+    });
 
-	mainWindow.loadFile("index.html")
+    mainWindow.loadFile("index.html");
 
-	// command execの設定
-	ipcMain.on("run-command", (event, command) => {
-		const process = spawn(command, [], { shell: true });
-		// 標準出力（stdout）のデータをリアルタイムで受け取る
-		process.stdout.on('data', (data) => {
-			event.reply("command-result", data.toString());
-		});
+    ipcMain.on("run-command", (event, command) => {
+        const process = spawn(command, [], { shell: true });
 
-		// 標準エラー出力（stderr）のデータもリアルタイムで受け取る
-		process.stderr.on('data', (data) => {
-			event.reply("command-result", `ERROR: ${data.toString()}`);
-		});
+        process.stdout.on('data', (data) => {
+            console.log(`stdout: ${data.toString()}`);
+            event.reply("command-result", { stdOut: data.toString() });
+        });
 
-		// プロセス終了時の処理
-		process.on('close', (code) => {
-			event.reply("command-result", `Process exited with code: ${code}`);
-		});
-	});
+        process.stderr.on('data', (data) => {
+            console.error(`stderr: ${data.toString()}`);
+            event.reply("command-result", { Error: data.toString() });
+        });
+
+        process.on('close', (code) => {
+            event.reply("command-result", { exitCode: code });
+        });
+    });
 });
 
 app.on("window-all-closed", () => {
-	app.quit();
+    app.quit();
 });
