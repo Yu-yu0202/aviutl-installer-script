@@ -1,6 +1,8 @@
-const outputElement = document.getElementById('output');
+// renderer.ts
 
-document.getElementById('runButton').addEventListener('click', function () {
+const outputElement = document.getElementById('output') as HTMLElement;
+
+document.getElementById('runButton')?.addEventListener('click', function () {
     // pathJoin を使用してコマンドのパスを生成
     const command = window.electron.pathJoin(__dirname, 'script_files', 'aviutl-installer.cmd');
 
@@ -9,7 +11,7 @@ document.getElementById('runButton').addEventListener('click', function () {
 });
 
 // コマンド実行結果を受け取る
-window.electron.onCommandResult((result) => {
+window.electron.onCommandResult((result: { stdOut?: string, Error?: string, exitCode?: number }) => {
     if (result.stdOut) {
         outputElement.textContent += result.stdOut + '\n';
     }
