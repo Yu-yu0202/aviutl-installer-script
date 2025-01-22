@@ -52,7 +52,7 @@ if ($tagName -ne $Version) {
 	$AISDownloadUrl = GithubLatestReleaseUrl "menndouyukkuri/aviutl-installer-script"
 	# 本体のzipファイルをダウンロード (待機)
 	Start-Process -FilePath curl.exe -ArgumentList "-OL $AISDownloadUrl" -WindowStyle Hidden -Wait
-	#tagNameから先頭の「v」を削除
+	# tagNameから先頭の「v」を削除
 	$tagName = $tagName.Substring(1)
 	# 本体のzipファイルを展開 (待機)
 	Start-Process powershell -ArgumentList "-command Expand-Archive -Path aviutl-installer_$tagName.zip -Force" -WindowStyle Hidden -Wait
