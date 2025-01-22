@@ -33,6 +33,9 @@ function GithubLatestReleaseUrl ($repo) {
 	return($api.assets.browser_download_url)
 }
 
+# スクリプトのバージョン
+$Version = "v1.1.2"
+
 $DisplayNameOfThisScript = "AviUtl Installer Script (Version 1.1.2_2025-01-21)"
 $Host.UI.RawUI.WindowTitle = $DisplayNameOfThisScript
 Write-Host "$($DisplayNameOfThisScript)`r`n`r`n"
@@ -58,13 +61,20 @@ if ($tagName -ne $Version) {
 	Start-Process powershell -ArgumentList "-command Expand-Archive -Path aviutl-installer_$tagName.zip -Force" -WindowStyle Hidden -Wait
 	# 展開後のzipを削除
 	Remove-Item aviutl-installer_$($tagName).zip
-	# 新バージョンを起動
-	Write-Host "新しいバージョンを起動します..."
-	# 展開後のフォルダに移動
-	Set-Location "aviutl-installer_$tagName"
-	Start-Process -FilePath "aviutl-installer.cmd"
-	# 旧バージョンを終了
+    # 新バージョンのファイル(aviutl-installer.cmd 以外)をルードディレクトリに移動(Force)
+    Get-ChildItem -Path "aviutl-installer_$tagName" | Where-Object { $_.Name -ne "aviutl-installer.cmd" } | Move-Item -Destination $scriptFileRoot -Force | Out-Null
+	# 競合防止でtmpフォルダを削除
+	Remove-Item -Path tmp -Recurse -Force | Out-Null
+	# 一旦ウィンドウをクリア(Host.UI.RauUI.WindowTitleとコンソールをクリア)にする
+	$Host.UI.RawUI.WindowTitle = ""
+	Clear-Host
+	# 新バージョンのcmdファイルの2行目からを展開し実行
+	$script = Get-Content -Path "aviutl-installer_$tagName\aviutl-installer.cmd" | Select-Object -Skip 1
+	Invoke-Expression $script
+	# スクリプトを終了
 	Exit
+} else {
+	Write-Host "更新はありません。"
 }
 
 Write-Host -NoNewline "AviUtlをインストールするフォルダを作成しています..."
