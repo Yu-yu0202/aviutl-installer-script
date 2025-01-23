@@ -1,0 +1,35 @@
+{
+	"name": "aviutl-installer-gui",
+	"version": "0.0.1",
+	"description": "日本語のREADMEは[こちら](./docs/README.ja.md)",
+	"main": "dist/main.js",
+	"directories": {
+		"doc": "docs"
+	},
+	"scripts": {
+		"clean": "rmdir /s /q dist/ > null",
+		"build": "npm run clean && tsc",
+		"start": "npm run build && electron ."
+	},
+	"build": {
+		"win": {
+			"target": "nsis"
+		}
+	},
+		"repository": {
+			"type": "git",
+			"url": "git+https://github.com/Yu-yu0202/aviutl-installer-script.git"
+		},
+		"author": "",
+		"license": "ISC",
+		"bugs": {
+			"url": "https://github.com/Yu-yu0202/aviutl-installer-script/issues"
+		},
+		"homepage": "https://github.com/Yu-yu0202/aviutl-installer-script#readme",
+		"dependencies": {
+			"@types/electron": "^1.4.38",
+			"@types/node": "^22.10.9",
+			"electron": "^34.0.1",
+			"typescript": "^5.7.3"
+		}
+	}
