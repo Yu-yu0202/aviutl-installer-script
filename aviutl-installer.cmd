@@ -5,7 +5,7 @@
 <#!
  #  MIT License
  #
- #  Copyright (c) 2025 menndouyukkuri, atolycs, Yu-yu0202
+ #  Copyright (c) 2025 menndouyukkuri, atolycs, Yu-yu0202, FullWidth-mion
  #
  #  Permission is hereby granted, free of charge, to any person obtaining a copy
  #  of this software and associated documentation files (the "Software"), to deal
@@ -55,8 +55,8 @@ param (
 )
 
 # バージョン情報を記載
-$VerNum = "1.1.20"
-$ReleaseDate = "2025-03-01"
+$VerNum = "1.1.21"
+$ReleaseDate = "2025-04-20"
 
 # 更新確認用にバージョン情報を格納
 $Version = "v" + $VerNum

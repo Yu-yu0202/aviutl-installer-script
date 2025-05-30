@@ -5,7 +5,7 @@
 <#!
  #  MIT License
  #
- #  Copyright (c) 2025 menndouyukkuri, atolycs, Yu-yu0202
+ #  Copyright (c) 2025 menndouyukkuri, atolycs, Yu-yu0202, FullWidth-mion
  #
  #  Permission is hereby granted, free of charge, to any person obtaining a copy
  #  of this software and associated documentation files (the "Software"), to deal
@@ -166,7 +166,7 @@ Write-Host -NoNewline "`r`napm.json を確認しています..."
 # apm.json が存在する場合、$apmJsonHash に読み込み、$apmJsonExist に true を格納
 $apmJsonExist = $false
 if (Test-Path "${Path}\apm.json") {
-	$apmJsonHash = Get-Content "${Path}\apm.json" | ConvertFrom-JsonEditable
+	$apmJsonHash = (Get-Content "${Path}\apm.json" -Raw) | ConvertFrom-JsonEditable
 	$apmJsonExist = $true
 
 # apm.json が存在しない場合、apm.json の元になるハッシュテーブルを用意して $apmJsonHash に代入
@@ -220,7 +220,7 @@ Write-Host -NoNewline "`r`nais.json を確認しています..."
 # ais.json が存在する場合、$aisJsonHash に読み込み、$aisJsonExist に true を格納
 $aisJsonExist = $false
 if (Test-Path "${Path}\ais.json") {
-	$aisJsonHash = Get-Content "${Path}\ais.json" | ConvertFrom-JsonEditable
+	$aisJsonHash = (Get-Content "${Path}\ais.json" -Raw) | ConvertFrom-JsonEditable
 	$aisJsonExist = $true
 
 # ais.json が存在しない場合、ais.json の元になるハッシュテーブルを用意して $aisJsonHash に代入
